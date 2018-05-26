@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import lusca from 'lusca';
 import path from "path";
 
+import bots from "./routes/bots";
 import test_route from "./routes/test_route";
 
 dotenv.config();
@@ -28,6 +29,7 @@ app.use(lusca.xssProtection(true));
 /**
  * Endpoints
  */
+app.use("/api/bots", bots);
 app.use("/api/test_route", test_route);
 
 // Serve static assets

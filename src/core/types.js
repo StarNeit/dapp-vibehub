@@ -13,5 +13,9 @@ export default keyMirror({
 
     GETTESTDT_REQUEST: null,
     GETTESTDT_SUCCESS: null,
-    GETTESTDT_FAILED: null
+    GETTESTDT_FAILED: null,
+
+    DEPLOYBOT_REQUEST: null,
+    DEPLOYBOT_SUCCESS: null,
+    DEPLOYBOT_FAILED: null
 });
