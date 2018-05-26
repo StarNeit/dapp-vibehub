@@ -1,5 +1,5 @@
-# VIBEHub Dapp (Node.js|React(Redux)|Smartcontract|MongoDB)
-VIBEHub Dapp with ethereum smart contract and Geth
+# VIBEHub Dapp
+VIBEHub Dapp with ethereum smart contract, Node.js ,React/Redux, MongoDB, and Geth
 
 
 ## Requirements
