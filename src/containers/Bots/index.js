@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 
-export default class Deposit extends Component {
+export default class Bots extends Component {
     render() {
         return (
             <div>
-               <h1>Deposit</h1>
+               <h1>VIBEHub Bot List</h1>
             </div>
         );
     }

@@ -17,12 +17,12 @@ export class Layout extends React.Component<{}, {}> {
                     {/*</div>*/}
                     {/*<div className="main_layout__content">*/}
                         {/*<div className="">*/}
-                            {/*{ this.props.children }*/}
+                            { this.props.children }
                         {/*</div>*/}
                         {/*<Footer/>*/}
                     {/*</div>*/}
                 {/*</div>*/}
             </div>
-        )
+        );
     }
 }

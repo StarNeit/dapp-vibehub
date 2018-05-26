@@ -19,7 +19,7 @@ App.propTypes = {
 
 function mapStateToProps(state) {
     return {
-        isAuthenticated: false
+        isAuthenticated: true
     };
 }
 

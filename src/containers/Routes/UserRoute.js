@@ -6,8 +6,7 @@ import { Route, Redirect } from "react-router-dom";
 const UserRoute = ({ isAuthenticated, component: Component, ...rest }) => (
     <Route
         {...rest}
-        render={props =>
-            isAuthenticated ? <Component {...props} /> : <Redirect to="/" />}
+        render={props => <Component {...props} />}
     />
 );
 
@@ -17,12 +16,8 @@ UserRoute.propTypes = {
 };
 
 function mapStateToProps(state) {
-    // console.log("-----UserRoute-------");
-    // console.log(state.rootReducer.auth.token);
-    // console.log("-----UserRoute-------");
-
     return {
-        isAuthenticated: !!state.rootReducer.auth.token
+        isAuthenticated: true
     };
 }
 
