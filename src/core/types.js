@@ -11,10 +11,6 @@ export default keyMirror({
     START_LOADING     : null,
     STOP_LOADING       : null,
 
-    GETTESTDT_REQUEST: null,
-    GETTESTDT_SUCCESS: null,
-    GETTESTDT_FAILED: null,
-
     DEPLOYBOT_REQUEST: null,
     DEPLOYBOT_SUCCESS: null,
     DEPLOYBOT_FAILED: null
