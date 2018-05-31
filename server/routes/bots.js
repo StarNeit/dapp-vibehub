@@ -26,6 +26,16 @@ router.route('/deploy-bots').post( (req, res) => {
     const total_fund = data_obj.total_fund * 10 ** 18;
     const gas_fee = data_obj.gas;
 
+    if (bot_number <= 0){
+        return res.status(400).json({ errors: "'Number of bots' should be more than 0." });
+    }
+    if (total_fund <= 0){
+        return res.status(400).json({ errors: "'Total fund' should be more than 0." });
+    }
+    if (period <= 0){
+        return res.status(400).json({ errors: "'Period' should be more than 0." });
+    }
+
     /**
      * Deploy bots
      */

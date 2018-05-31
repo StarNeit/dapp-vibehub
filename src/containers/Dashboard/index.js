@@ -47,6 +47,8 @@ class Dashboard extends Component {
     }
 
     render() {
+        console.log("[deploybot] ", this.props.deployState.deploy_bot);
+
         return (
             <div>
                 <div className="text-center label_big">
@@ -103,6 +105,18 @@ class Dashboard extends Component {
                             <div className="text-center">
                                 <button className="form-control btn-deploy-bot" onClick={this.deployBot}>DEPLOY</button>
                             </div>
+                            {
+                                this.props.deployState.deploy_bot === -1 &&
+                                <div className="err_msg">
+                                    {this.props.deployState.err_deploy_bot}
+                                </div>
+                            }
+                            {
+                                this.props.deployState.deploy_bot === 1 &&
+                                <div className="success_msg">
+                                    Bots deployment have been started successfully.
+                                </div>
+                            }
                         </div>
                     </div>
                 </div>

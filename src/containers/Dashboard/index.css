@@ -31,6 +31,18 @@
     margin-top: 10px;
 }
 
+.err_msg{
+    color: #f00;
+    text-align: center;
+    margin-top: 15px;
+}
+
+.success_msg{
+    color: #6170FF;
+    text-align: center;
+    margin-top: 15px;
+}
+
 @media (max-width: 768px) {
     .bot_label{
         padding-top: 0;
