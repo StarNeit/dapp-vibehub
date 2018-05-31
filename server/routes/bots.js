@@ -1,10 +1,14 @@
 import express from "express";
-const router = express.Router();
-
-var Web3 = require('web3');
+import dotenv from "dotenv";
+import Web3 from "web3";
+import Bots from "../models/Bots";
 var BotContract = require('../../build/contracts/BotContract.json');
 
-const web3 = new Web3(new Web3.providers.WebsocketProvider("ws://18.216.49.67:9546"));
+dotenv.config();
+
+const router = express.Router();
+
+const web3 = new Web3(new Web3.providers.WebsocketProvider(process.env.BLOCKCHAIN_NODE));
 const contract = new web3.eth.Contract(BotContract.abi);
 contract.setProvider(web3.currentProvider);
 
@@ -17,52 +21,72 @@ router.route('/deploy-bots').post( (req, res) => {
     /**
      * Validation
      */
-    const bot_number = data_obj.bot_number;
-    const period = data_obj.period;
-    const total_fund = data_obj.total_fund;
-    const gas = data_obj.gas;
-
+    const bot_number = parseInt(data_obj.bot_number);
+    const period = parseInt(data_obj.period);
+    const total_fund = data_obj.total_fund * 10 ** 18;
+    const gas_fee = data_obj.gas;
 
     /**
      * Deploy bots
      */
     web3.eth.getGasPrice()
         .then( gasPrice => {
-            console.log(gasPrice);
+            console.log("[GasPrice] ", gasPrice);
 
             contract.deploy({
-                    data: BotContract.bytecode,
-                    arguments: [
-                        "cointype",
-                        "1000",
-                        "0x123456789",
-                        "21000"
-                    ]
-                })
-                .estimateGas( (err, gas) => {
-                    console.log(gas);
+                data: BotContract.bytecode,
+                arguments: [
+                    total_fund,
+                    period
+                ]
+            }).estimateGas( (err, gas) => {
+                console.log("[Gas] ", gas);
 
+                var intval_id, index = 0;
+                intval_id = setInterval(function () {
                     contract.deploy({
                         data: BotContract.bytecode,
                         arguments: [
-                            "cointype",
-                            "1000",
-                            "0x123456789",
-                            "15"
+                            total_fund,
+                            period
                         ]
                     }).send({
-                        from: "0x2b9c5287ddb80c7284e635ce04d256a144232d9a",
+                        from: process.env.ADMIN_ADDRESS,
                         gas: gas,
                         gasPrice
                     }).on('transactionHash', (transactionHash) => {
                         console.log("Hash....", transactionHash);
+
+                        /**
+                         * Save in DB
+                         */
+                        let bot = new Bots();
+                        bot.tx = transactionHash;
+                        bot.period = period;
+                        bot.total_fund = total_fund;
+                        bot.remaining_fund = "0";
+                        bot.verified = false;
+                        bot.save().then(() => {
+                            console.log("[A Bot has been deployed]");
+                        }).catch(err => {
+                            console.log("[MongoDB Save Failed] ", err);
+                        });
+
+                        index ++;
+                        if (index >= bot_number){
+                            clearInterval(intval_id);
+                        }
                     }).then((newContractInstance) => {
                         console.log("Address, ", newContractInstance.options.address);
                     }).catch(error => {
                         console.log(error.message);
                     });
-                });
+                }, 2000);
+            });
         });
+
+    res.json({});
 });
 
 export default router;
+
