@@ -12,19 +12,20 @@ const web3 = new Web3(new Web3.providers.WebsocketProvider(process.env.BLOCKCHAI
 const contract = new web3.eth.Contract(BotContract.abi);
 contract.setProvider(web3.currentProvider);
 
+/**
+ *  Bot Deployment
+ */
 router.route('/deploy-bots').post( (req, res) => {
-    console.log("[deploy-bots]");
+    console.log("[/deploy-bots]");
 
     const data_obj = req.body.data_obj;
-    console.log(data_obj);
-
     /**
      * Validation
      */
     const bot_number = parseInt(data_obj.bot_number);
     const period = parseInt(data_obj.period);
     const total_fund = data_obj.total_fund * 10 ** 18;
-    const gas_fee = data_obj.gas;
+    const gas_fee = data_obj.gas; // gas fee! (discussion)
 
     if (bot_number <= 0){
         return res.status(400).json({ errors: "'Number of bots' should be more than 0." });
@@ -98,5 +99,20 @@ router.route('/deploy-bots').post( (req, res) => {
     res.json({});
 });
 
-export default router;
 
+/**
+ *  Bots Listing
+ */
+router.route('/get-bots-list').get( (req, res) => {
+    console.log("[/get-bots-list]");
+
+    Bots.find({}).then(botList => {
+        return res.json(botList);
+    })
+        .catch(error => {
+            console.log("get bot list error...........", error.message);
+            return res.status(401).json({});
+        });
+});
+
+export default router;

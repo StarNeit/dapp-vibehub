@@ -20,3 +20,23 @@ export const deployBots = botspec => dispatch => {
             });
         });
 };
+
+export const getBotlist = () => dispatch => {
+
+    dispatch({
+        type: constants.GETBOTLIST_REQUEST
+    });
+    api.deploybot.getBotlist().then(dBots => {
+        dispatch({
+            type: constants.GETBOTLIST_SUCCESS,
+            payload: dBots.data,
+        });
+    })
+        .catch(error => {
+            console.log(error.response.data.errors);
+            dispatch({
+                type: constants.GETBOTLIST_FAILED,
+                payload: error.response.data.errors
+            });
+        });
+};
