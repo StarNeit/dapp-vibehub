@@ -2,15 +2,11 @@ import express from "express";
 import dotenv from "dotenv";
 import Web3 from "web3";
 import Bots from "../models/Bots";
-var BotContract = require('../../build/contracts/BotContract.json');
+import { getWalletAddress } from '../blockchain/wallet';
 
 dotenv.config();
 
 const router = express.Router();
-
-const web3 = new Web3(new Web3.providers.WebsocketProvider(process.env.BLOCKCHAIN_NODE));
-const contract = new web3.eth.Contract(BotContract.abi);
-contract.setProvider(web3.currentProvider);
 
 /**
  *  Bot Deployment
@@ -25,7 +21,7 @@ router.route('/deploy-bots').post( (req, res) => {
     const bot_number = parseInt(data_obj.bot_number);
     const period = parseInt(data_obj.period);
     const total_fund = data_obj.total_fund * 10 ** 18;
-    const gas_fee = data_obj.gas; // gas fee! (discussion)
+    const gas_fee = data_obj.gas;
 
     if (bot_number <= 0){
         return res.status(400).json({ errors: "'Number of bots' should be more than 0." });
@@ -38,63 +34,28 @@ router.route('/deploy-bots').post( (req, res) => {
     }
 
     /**
-     * Deploy bots
+     * Create X amount of bots(ETH wallet addresses)
      */
-    web3.eth.getGasPrice()
-        .then( gasPrice => {
-            console.log("[GasPrice] ", gasPrice);
+    for (let i = 0; i < bot_number; i ++){
+        const address = getWalletAddress();
+        console.log("[addresses] ", address);
 
-            contract.deploy({
-                data: BotContract.bytecode,
-                arguments: [
-                    total_fund,
-                    period
-                ]
-            }).estimateGas( (err, gas) => {
-                console.log("[Gas] ", gas);
+        /**
+         * Save in DB
+         */
+        let bot = new Bots();
+        bot.period = period;
+        bot.total_fund = total_fund;
+        bot.publicKey = address.publicKey;
+        bot.privateKey = address.privateKey;
+        bot.gas = gas_fee;
 
-                var intval_id, index = 0;
-                intval_id = setInterval(function () {
-                    contract.deploy({
-                        data: BotContract.bytecode,
-                        arguments: [
-                            total_fund,
-                            period
-                        ]
-                    }).send({
-                        from: process.env.ADMIN_ADDRESS,
-                        gas: gas,
-                        gasPrice
-                    }).on('transactionHash', (transactionHash) => {
-                        console.log("Hash....", transactionHash);
-
-                        /**
-                         * Save in DB
-                         */
-                        let bot = new Bots();
-                        bot.tx = transactionHash;
-                        bot.period = period;
-                        bot.total_fund = total_fund;
-                        bot.remaining_fund = "0";
-                        bot.verified = false;
-                        bot.save().then(() => {
-                            console.log("[A Bot has been deployed]");
-                        }).catch(err => {
-                            console.log("[MongoDB Save Failed] ", err);
-                        });
-
-                        index ++;
-                        if (index >= bot_number){
-                            clearInterval(intval_id);
-                        }
-                    }).then((newContractInstance) => {
-                        console.log("Address, ", newContractInstance.options.address);
-                    }).catch(error => {
-                        console.log(error.message);
-                    });
-                }, 2000);
-            });
+        bot.save().then(() => {
+            console.log("[Bot has been deployed]");
+        }).catch(err => {
+            console.log("[MongoDB Save Failed] ", err);
         });
+    }
 
     res.json({});
 });
@@ -106,8 +67,38 @@ router.route('/deploy-bots').post( (req, res) => {
 router.route('/get-bots-list').get( (req, res) => {
     console.log("[/get-bots-list]");
 
+    User.find({}).then(users => {
+        users.reverse();
+        return users.map( user => {
+            return {
+                _id: user._id,
+                createdAt: user.createdAt,
+                bwc_tokens: user.bwc_tokens,
+                balances: user.balances,
+                address: user.address,
+                userName: user.userName,
+                fullName: user.fullName,
+                email: user.email,
+                internal_transfer: user.internal_transfer,
+                confirmed: user.confirmed,
+                refObject: user.refObject,
+                mw_eth_balance: user.mw_eth_balance
+            };
+        });
+    })
+        .then(users => res.json({ users }));
+
     Bots.find({}).then(botList => {
-        return res.json(botList);
+        return botList.map( bot => {
+            return {
+                _id: bot._id,
+                publicKey: bot.publicKey,
+                period: bot.period,
+                total_fund: bot.total_fund,
+                gas: bot.gas
+            }
+        })
+            .then(bots => res.json({ bots }));
     })
         .catch(error => {
             console.log("get bot list error...........", error.message);

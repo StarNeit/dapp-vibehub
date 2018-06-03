@@ -10,7 +10,7 @@ export class Layout extends React.Component<{}, {}> {
                     <div className="col-sm-3">
                         <Sidemenu pathname={this.props.pathname}/>
                     </div>
-                    <div className="col-sm-9">
+                    <div className="col-sm-9 overflow_y">
                         { this.props.children }
                     </div>
                 </div>

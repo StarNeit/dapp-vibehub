@@ -18,6 +18,9 @@ body, html{
     height: 100%;
 }
 
+.overflow_y{
+    overflow-y: auto;
+}
 
 @media (max-width: 768px) {
     .main-container, .main-container > .row, .main-container > .row > div{

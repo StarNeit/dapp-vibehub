@@ -35,6 +35,10 @@ export class BotsListTable extends Component {
         return <div>{row.total_fund/(10**18)}</div>;
     };
 
+    const actionFormat = (cell, row, enumObj, index) => {
+        return <div><button className="form-control">Details</button></div>;
+    };
+
     return (
       <div>
         <BootstrapTable
@@ -101,6 +105,7 @@ export class BotsListTable extends Component {
             Status
           </TableHeaderColumn>
           <TableHeaderColumn
+              dataFormat={actionFormat}
               className="td-header-class"
               width="30"
               tdStyle={{ textAlign: "center", lineHeight: "35px" }}
