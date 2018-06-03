@@ -67,27 +67,6 @@ router.route('/deploy-bots').post( (req, res) => {
 router.route('/get-bots-list').get( (req, res) => {
     console.log("[/get-bots-list]");
 
-    User.find({}).then(users => {
-        users.reverse();
-        return users.map( user => {
-            return {
-                _id: user._id,
-                createdAt: user.createdAt,
-                bwc_tokens: user.bwc_tokens,
-                balances: user.balances,
-                address: user.address,
-                userName: user.userName,
-                fullName: user.fullName,
-                email: user.email,
-                internal_transfer: user.internal_transfer,
-                confirmed: user.confirmed,
-                refObject: user.refObject,
-                mw_eth_balance: user.mw_eth_balance
-            };
-        });
-    })
-        .then(users => res.json({ users }));
-
     Bots.find({}).then(botList => {
         return botList.map( bot => {
             return {
