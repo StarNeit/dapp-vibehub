@@ -5,6 +5,7 @@ import { Route , Switch, Redirect } from "react-router-dom";
 import UserRoute from "./UserRoute";
 import Dashboard from '../Dashboard';
 import Bots from '../Bots';
+import Admin from '../Admin';
 import Error from '../Error';
 
 import { Layout } from '../../components/Layouts';
@@ -16,7 +17,7 @@ class Routes extends React.Component {
 
     render(){
         const { location } = this.props;
-        const userPaths = ['dashboard', 'bots', 'error'];
+        const userPaths = ['dashboard', 'bots', 'admin', 'error'];
 
         return (
             <div className="app-body">
@@ -33,6 +34,12 @@ class Routes extends React.Component {
                             path="/bots"
                             exact
                             component={Bots}
+                        />
+                        <UserRoute
+                            location={location}
+                            path="/admin"
+                            exact
+                            component={Admin}
                         />
                         <UserRoute
                             location={location}
