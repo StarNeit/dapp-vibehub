@@ -1,0 +1,96 @@
+{
+  "_args": [
+    [
+      "truffle-hdwallet-provider@0.0.3",
+      "/Volumes/Works/BlockChain/Bwcoin/Project/bwcoin"
+    ]
+  ],
+  "_from": "truffle-hdwallet-provider@0.0.3",
+  "_id": "truffle-hdwallet-provider@0.0.3",
+  "_inBundle": false,
+  "_integrity": "sha1-Dh3gIQS3PTh14c9wkzBbTqii2EM=",
+  "_location": "/truffle-hdwallet-provider",
+  "_phantomChildren": {
+    "async": "2.1.4",
+    "bn.js": "4.11.8",
+    "create-hash": "1.1.3",
+    "crypto-js": "3.1.8",
+    "deep-equal": "1.0.1",
+    "defined": "1.0.0",
+    "ethereumjs-block": "1.7.0",
+    "ethereumjs-tx": "1.3.3",
+    "ethereumjs-vm": "2.3.2",
+    "ethjs-util": "0.1.4",
+    "for-each": "0.3.2",
+    "function-bind": "1.1.1",
+    "glob": "7.1.2",
+    "has": "1.0.1",
+    "inherits": "2.0.3",
+    "isomorphic-fetch": "2.2.1",
+    "keccak": "1.4.0",
+    "path-parse": "1.0.5",
+    "request": "2.83.0",
+    "resumer": "0.0.0",
+    "rlp": "2.0.0",
+    "safe-buffer": "5.1.1",
+    "secp256k1": "3.2.5",
+    "semaphore": "1.1.0",
+    "solc": "0.4.19",
+    "string.prototype.trim": "1.1.2",
+    "through": "2.3.8",
+    "utf8": "2.1.2",
+    "xhr": "2.4.1",
+    "xhr2": "0.1.4",
+    "xmlhttprequest": "1.8.0",
+    "xtend": "4.0.1"
+  },
+  "_requested": {
+    "type": "version",
+    "registry": true,
+    "raw": "truffle-hdwallet-provider@0.0.3",
+    "name": "truffle-hdwallet-provider",
+    "escapedName": "truffle-hdwallet-provider",
+    "rawSpec": "0.0.3",
+    "saveSpec": null,
+    "fetchSpec": "0.0.3"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/truffle-hdwallet-provider/-/truffle-hdwallet-provider-0.0.3.tgz",
+  "_spec": "0.0.3",
+  "_where": "/Volumes/Works/BlockChain/Bwcoin/Project/bwcoin",
+  "author": {
+    "name": "Tim Coulter",
+    "email": "tim.coulter@consensys.net"
+  },
+  "bugs": {
+    "url": "https://github.com/trufflesuite/truffle-hdwallet-provider/issues"
+  },
+  "dependencies": {
+    "bip39": "^2.2.0",
+    "ethereumjs-wallet": "^0.6.0",
+    "web3": "^0.18.2",
+    "web3-provider-engine": "^8.4.0"
+  },
+  "description": "HD Wallet-enabled Web3 provider",
+  "homepage": "https://github.com/trufflesuite/truffle-hdwallet-provider#readme",
+  "keywords": [
+    "etheruem",
+    "hd",
+    "wallet",
+    "mnemonic",
+    "provider"
+  ],
+  "license": "MIT",
+  "main": "index.js",
+  "name": "truffle-hdwallet-provider",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/trufflesuite/truffle-hdwallet-provider.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "0.0.3"
+}

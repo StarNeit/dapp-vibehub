@@ -115,7 +115,7 @@ class Dashboard extends Component {
                             {
                                 this.props.deployState.deploy_bot === 1 &&
                                 <div className="success_msg">
-                                    Bots deployment have been started successfully.
+                                    Bots deployment can take from 1 minutes to 2 hours and more. Please check and refresh [bot list] page.
                                 </div>
                             }
                         </div>

@@ -17,18 +17,8 @@ export class BotsListTable extends Component {
         _botlist = [];
     }
 
-    const statusFormat = (cell, row, enumObj, index) => {
-      var status = row.verified;
-
-      if (!status) {
-        return <div className="status_credit">DEPLOYED</div>;
-      } else{
-        return <div className="status_deposit">PENDING</div>;
-      }
-    };
-
-    const txFormat = (cell, row, enumObj, index) => {
-        return <a href={"https://ropsten.etherscan.io/tx/" + row.tx} target="_blank">{row.tx}</a>;
+    const addressFormat = (cell, row, enumObj, index) => {
+        return <a href={"https://ropsten.etherscan.io/address/" + row.publicKey} target="_blank">{row.publicKey}</a>;
     };
 
     const fundFormat = (cell, row, enumObj, index) => {
@@ -60,13 +50,13 @@ export class BotsListTable extends Component {
             ID
           </TableHeaderColumn>
           <TableHeaderColumn
-            dataFormat={txFormat}
+            dataFormat={addressFormat}
             className="td-header-class"
-            width="150"
+            width="130"
             tdStyle={{ textAlign: "center", lineHeight: "35px" }}
             thStyle={{ textAlign: "center", lineHeight: "35px" }}
           >
-            TxHash
+            ETH Wallet Address
           </TableHeaderColumn>
           <TableHeaderColumn
             dataFormat={fundFormat}
@@ -75,34 +65,25 @@ export class BotsListTable extends Component {
             tdStyle={{ textAlign: "center", lineHeight: "35px" }}
             thStyle={{ textAlign: "center", lineHeight: "35px" }}
           >
-            Total Fund
-          </TableHeaderColumn>
-          <TableHeaderColumn
-            dataField="remaining_fund"
-            className="td-header-class"
-            width="70"
-            tdStyle={{ textAlign: "center", lineHeight: "35px" }}
-            thStyle={{ textAlign: "center", lineHeight: "35px" }}
-          >
-            Remaining Fund
+            Balance
           </TableHeaderColumn>
           <TableHeaderColumn
               dataField="period"
               className="td-header-class"
-              width="30"
+              width="70"
               tdStyle={{ textAlign: "center", lineHeight: "35px" }}
               thStyle={{ textAlign: "center", lineHeight: "35px" }}
           >
             Period
           </TableHeaderColumn>
           <TableHeaderColumn
-            dataFormat={statusFormat}
+            dataField="gas"
             className="td-header-class"
-            width="30"
+            width="70"
             tdStyle={{ textAlign: "center", lineHeight: "35px" }}
             thStyle={{ textAlign: "center", lineHeight: "35px" }}
           >
-            Status
+            Gas
           </TableHeaderColumn>
           <TableHeaderColumn
               dataFormat={actionFormat}

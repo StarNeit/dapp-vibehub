@@ -35,7 +35,7 @@ contract Ownable {
     }
 
 }
-contract BWCToken is Ownable{
+contract BotContract is Ownable{
 
     uint256 public totalSupply;
     mapping(address => uint256) balances;

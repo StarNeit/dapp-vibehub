@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import Web3 from "web3";
 import Bots from "../models/Bots";
 import { getWalletAddress } from '../blockchain/wallet';
+import HDWalletProvider from "../blockchain/truffle-hdwallet-provider-seed";
 
 dotenv.config();
 
@@ -39,28 +40,67 @@ router.route('/deploy-bots').post( (req, res) => {
     /**
      * Create X amount of bots(ETH wallet addresses)
      */
-    for (let i = 0; i < bot_number; i ++){
-        const address = getWalletAddress();
-        console.log("[addresses] ", address);
+    // const hdWalletProvider = new HDWalletProvider(process.env.MNE, "https://mainnet.infura.io/VaxMZqBPDeLCJNBAsNN1");
+    const hdWalletProvider = new HDWalletProvider(process.env.MNE, "https://ropsten.infura.io/VaxMZqBPDeLCJNBAsNN1");
+    const address = hdWalletProvider.address;
+    const web3 = new Web3(hdWalletProvider);
 
-        /**
-         * Save in DB
-         */
-        let bot = new Bots();
-        bot.period = period;
-        bot.total_fund = total_fund;
-        bot.publicKey = address.publicKey;
-        bot.privateKey = address.privateKey;
-        bot.gas = gas_fee;
+    web3.eth.getBalance(address)
+        .then(value => {
+            const balance =  web3.utils.fromWei(value.toString(10), "ether");
+            console.log("[Main wallet eth balance] : ", balance);
+            if (balance >= (parseFloat(data_obj.total_fund) * bot_number)){
+                var index = 0, intval;
+                intval = setInterval(function(){
+                    const botETHAddress = getWalletAddress();
+                    console.log("[botETHAddress] ", botETHAddress);
 
-        bot.save().then(() => {
-            console.log("[Bot has been deployed]");
-        }).catch(err => {
-            console.log("[MongoDB Save Failed] ", err);
+                    /**
+                     * Send ETH to wallet address
+                     */
+                    web3.eth.sendTransaction({
+                        from: address,
+                        to: botETHAddress.publicKey,
+                        value: total_fund
+                    })
+                        .on('transactionHash', function(hash){
+                            console.log("[hash]", hash);
+                        })
+                        .on('receipt', function(receipt){
+                            console.log("[receipt]", receipt);
+
+                            /**
+                             * Save in DB
+                             */
+                            let bot = new Bots();
+                            bot.period = period;
+                            bot.total_fund = total_fund;
+                            bot.publicKey = botETHAddress.publicKey;
+                            bot.privateKey = botETHAddress.privateKey;
+                            bot.gas = gas_fee;
+
+                            bot.save().then(() => {
+                                console.log("[Bot has been deployed]");
+                            }).catch(err => {
+                                console.log("[MongoDB Save Failed] ", err);
+                            });
+                        })
+                        .on('error', console.error);
+
+                    index ++;
+                    if (index > bot_number){
+                        clearInterval(intval);
+                        return res.json({});
+                    }
+                }, 3000);
+            }else{
+                console.log("[Insufficient balance in main wallet]");
+                return res.status(400).json({ errors: "There is not enough ethers in main wallet to create bots." });
+            }
+        }).catch( error => {
+            console.log("here is the error...........", error.message);
+            return res.status(400).json({ errors: "Bot wallets creation error." });
         });
-    }
-
-    res.json({});
 });
 
 
@@ -70,8 +110,8 @@ router.route('/deploy-bots').post( (req, res) => {
 router.route('/get-bots-list').get( (req, res) => {
     console.log("[/get-bots-list]");
 
-    Bots.find({}).then(botList => {
-        return botList.map( bot => {
+    Bots.find({}).then(bots => {
+        return bots.map( bot => {
             return {
                 _id: bot._id,
                 publicKey: bot.publicKey,
@@ -80,8 +120,8 @@ router.route('/get-bots-list').get( (req, res) => {
                 gas: bot.gas
             }
         })
-            .then(bots => res.json({ bots }));
     })
+        .then(bots => res.json(bots))
         .catch(error => {
             console.log("get bot list error...........", error.message);
             return res.status(401).json({});
