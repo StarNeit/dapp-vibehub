@@ -1,0 +1,30 @@
+/**
+  Loading bar
+ */
+
+.loading_bar__container {
+  text-align: center;
+  color: #eaeaea;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+}
+.loading_bar__container > span {
+  padding-top: 7px;
+  display: block;
+  letter-spacing: 2px;
+}
+.loading_bar__container .css-15s48b {
+  margin-left: auto !important;
+  margin-right: auto !important;
+  margin-top: 20%;
+}
+.purchase_visible {
+  display: block;
+}
+.purchase_hidden {
+  display: none;
+}

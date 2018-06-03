@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { deployBots } from '../../core/actions/deploy';
+import CRingLoader from '../../components/CRingLoader';
 
 import './index.css';
 
@@ -120,6 +121,8 @@ class Dashboard extends Component {
                         </div>
                     </div>
                 </div>
+
+                <CRingLoader is_show={this.props.deployState.is_loading}/>
             </div>
         );
     }

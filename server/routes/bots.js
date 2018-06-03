@@ -21,7 +21,7 @@ router.route('/deploy-bots').post( (req, res) => {
     const bot_number = parseInt(data_obj.bot_number);
     const period = parseInt(data_obj.period);
     const total_fund = data_obj.total_fund * 10 ** 18;
-    const gas_fee = data_obj.gas;
+    const gas_fee = parseFloat(data_obj.gas);
 
     if (bot_number <= 0){
         return res.status(400).json({ errors: "'Number of bots' should be more than 0." });
@@ -31,6 +31,9 @@ router.route('/deploy-bots').post( (req, res) => {
     }
     if (period <= 0){
         return res.status(400).json({ errors: "'Period' should be more than 0." });
+    }
+    if (gas_fee <= 0){
+        return res.status(400).json({ errors: "'Gas' should be more than 0." });
     }
 
     /**
